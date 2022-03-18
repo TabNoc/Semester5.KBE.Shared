@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using KBE.Shared.Configuration;
 using KBE.Shared.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -14,8 +15,11 @@ namespace KBE.Shared
 			LoggerConfiguration loggerConfiguration = configuration
 				.ReadFrom.Configuration(context.Configuration) // see https://github.com/serilog/serilog-aspnetcore for syntax
 				.ReadFrom.Services(services)
+				.Enrich.WithProperty("Application", GetAssemblyName())
 				.Enrich.FromLogContext()
 				.WriteTo.Console();
+
+			Log.Logger.Information("Current Assembly: {AssemblyName}", GetAssemblyName());
 
 			TrySafeRegisteringSeq(context, loggerConfiguration);
 		}
@@ -24,6 +28,7 @@ namespace KBE.Shared
 		{
 			Log.Logger = new LoggerConfiguration()
 				.MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+				.Enrich.WithProperty("Application", GetAssemblyName())
 				.Enrich.FromLogContext()
 				.WriteTo.Console()
 				.CreateBootstrapLogger();
@@ -67,6 +72,14 @@ namespace KBE.Shared
 			{
 				Log.Logger.Warning("Found valid LoggingConfiguration, but no Server was configured");
 			}
+		}
+
+		private static string GetAssemblyName()
+		{
+			return Assembly.GetEntryAssembly()
+				?
+				.GetName()
+				.Name ?? "Unable to obtain AssemblyName";
 		}
 
 		private static void TrySafeRegisteringSeq(HostBuilderContext context, LoggerConfiguration loggerConfiguration)
