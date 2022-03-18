@@ -7,7 +7,7 @@ using Serilog.Events;
 
 namespace KBE.Shared
 {
-	internal class LoggingHelper
+	public class LoggingHelper
 	{
 		public void RegisterFullLogger(HostBuilderContext context, IServiceProvider services, LoggerConfiguration configuration)
 		{
