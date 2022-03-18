@@ -1,8 +1,9 @@
 ﻿using FluentValidation;
+using KBE.Shared.Interfaces;
 
 namespace KBE.Shared.Configuration
 {
-	public class LoggingConfiguration
+	public class LoggingConfiguration : IValidatable
 	{
 		public string? SeqServerUri { get; set; }
 		public string? SeqServerApiKey { get; set; }
