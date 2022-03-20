@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using FluentValidation;
-using KBE.Shared.Interfaces;
 
 namespace KBE.Shared.Models
 {
-	public class RichProductDto : ThinProductDto, IValidatable
+	public class RichProductDto : ThinProductDto
 	{
 		public int Amount { get; set; }
 		public List<string> Comments { get; set; } = null!;
 		public DateTimeOffset DeliveryDate { get; set; }
+
+		[JsonConverter(typeof(JsonTimeSpanConverter))]
 		public TimeSpan DeliveryTime { get; set; }
+
 		public string Location { get; set; } = null!;
 		public double Mehrwertsteuer { get; set; }
 

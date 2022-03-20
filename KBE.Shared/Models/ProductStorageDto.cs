@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using FluentValidation;
 using KBE.Shared.Interfaces;
 
@@ -7,7 +8,10 @@ namespace KBE.Shared.Models
 	public class ProductStorageDto : IValidatable
 	{
 		public int Amount { get; set; }
+
+		[JsonConverter(typeof(JsonTimeSpanConverter))]
 		public TimeSpan DeliveryTime { get; set; }
+
 		public string Location { get; set; } = null!;
 		public Guid ProductId { get; set; }
 
